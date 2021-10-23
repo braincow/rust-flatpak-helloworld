@@ -1,0 +1,31 @@
+app-id: me.bcow.HelloWorld
+command: me.bcow.HelloWorld
+
+runtime: org.freedesktop.Platform
+runtime-version: "21.08"
+
+tags:
+  - development
+
+sdk: org.freedesktop.Sdk
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.rust-stable
+build-options:
+  append-path: /usr/lib/sdk/rust-stable/bin
+  build-args:
+    - --share=network
+  env:
+    CARGO_HOME: /run/build/HelloWorld/cargo
+    RUSTFLAGS: --remap-path-prefix =../
+    RUST_BACKTRACE: "1"
+
+modules:
+  - build-commands:
+      - make PREFIX=/app
+      - make install PREFIX=/app
+    buildsystem: simple
+    name: HelloWorld
+    sources:
+      - path: ../
+        type: dir
+# eof

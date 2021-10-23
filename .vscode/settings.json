@@ -1,0 +1,7 @@
+{
+    "files.exclude": {
+        ".flatpak-builder/": true,
+        "flatpak-development/": true,
+        "target/": true
+    }
+}
