@@ -33,9 +33,9 @@ uninstall :
 	rm -f $(sharedir)/me.bcow.HelloWorld/helloworld.txt
 
 # Build a Flatpak package
-flatpak-development: target/release/helloworld setup-flatpak
+flatpak-development: target/release/helloworld
 	mkdir -p flatpak-development
-	flatpak-builder --verbose flatpak-development data/me.bcow.HelloWorld-development.yaml
+	flatpak-builder --repo flatpak-repo flatpak-development data/me.bcow.HelloWorld-development.yaml
 
 # Remove supplemental build files
 clean:
@@ -45,8 +45,8 @@ clean-all: clean
 	rm -rf target/
 
 # Test the flatpak package install locally
-flatpak-test-development: setup-flatpak
-	flatpak-builder --user --install --force-clean flatpak-development data/me.bcow.HelloWorld-development.yaml
+flatpak-test-development:
+	flatpak-builder --user --install flatpak-development data/me.bcow.HelloWorld-development.yaml
 	@echo
 	@echo ===========
 	@echo
@@ -56,12 +56,15 @@ flatpak-test-development: setup-flatpak
 	@echo
 	flatpak --user uninstall --assumeyes me.bcow.HelloWorld
 
+flatpak-bundle-development: flatpak-development
+	flatpak build-bundle flatpak-repo helloworld.flatpak me.bcow.HelloWorld
+
 # Helper for setting up the env for building flatpak packages
 setup-flatpak:
 	flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 	flatpak install --user --assumeyes flathub org.freedesktop.Platform//21.08 org.freedesktop.Sdk//21.08
 	flatpak install --user --assumeyes flathub org.freedesktop.Sdk.Extension.rust-stable//21.08
 
-all: flatpak-development
+all: setup-flatpak flatpak-development flatpak-bundle-development
 
 # eof

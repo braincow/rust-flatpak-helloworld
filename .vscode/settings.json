@@ -2,6 +2,7 @@
     "files.exclude": {
         ".flatpak-builder/": true,
         "flatpak-development/": true,
-        "target/": true
+        "target/": true,
+        "flatpak-repo": true
     }
 }
