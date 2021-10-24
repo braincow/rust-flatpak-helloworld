@@ -1,5 +1,6 @@
 /target
 /.flatpak-builder
 /flatpak-development
+/flatpak-development-repo
 /flatpak-repo
 *.flatpak

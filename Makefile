@@ -35,14 +35,19 @@ uninstall :
 # Build a Flatpak package
 flatpak-development: target/release/helloworld
 	mkdir -p flatpak-development
-	flatpak-builder --repo flatpak-repo flatpak-development data/me.bcow.HelloWorld-development.yaml
+	flatpak-builder --repo flatpak-development-repo flatpak-development data/me.bcow.HelloWorld-development.yaml
+
+# remove development build files
+clean-dev:
+	rm -rf flatpak-development/ flatpak-development-repo/
 
 # Remove supplemental build files
-clean:
-	rm -rf .flatpak-builder/ flatpak-development/
+clean: clean-dev
+	rm -rf .flatpak-builder/
 
 clean-all: clean
 	rm -rf target/
+	rm *.flatpak
 
 # Test the flatpak package install locally
 flatpak-test-development:
@@ -57,7 +62,7 @@ flatpak-test-development:
 	flatpak --user uninstall --assumeyes me.bcow.HelloWorld
 
 flatpak-bundle-development: flatpak-development
-	flatpak build-bundle flatpak-repo helloworld.flatpak me.bcow.HelloWorld
+	flatpak build-bundle flatpak-development-repo helloworld-development.flatpak me.bcow.HelloWorld
 
 # Helper for setting up the env for building flatpak packages
 setup-flatpak:
